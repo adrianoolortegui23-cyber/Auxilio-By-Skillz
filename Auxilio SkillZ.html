@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de Sensibilidad Free Fire</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #1e1e2e; color: #eee; padding: 20px; }
+    h1 { color: #f39c12; text-align: center; }
+    .input-group { margin: 10px 0; }
+    label { display: block; margin-bottom: 5px; }
+    input[type="number"] { width: 100%; padding: 5px; background: #333; border: none; color: #eee; border-radius: 4px; }
+    button { background: #f39c12; border: none; padding: 10px; color: #2c3e50; cursor: pointer; border-radius: 5px; width: 100%; }
+    button:hover { background: #e67e22; }
+    pre { background: #2c3e50; padding: 15px; border-radius: 5px; margin-top: 20px; overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <h1>Generador de Sensibilidad – Free Fire</h1>
+  <div class="input-group">
+    <label>General:</label>
+    <input id="general" type="number" min="0" max="200" value="90">
+  </div>
+  <div class="input-group">
+    <label>Punto rojo (Red Dot):</label>
+    <input id="reddot" type="number" min="0" max="200" value="90">
+  </div>
+  <div class="input-group">
+    <label>Mira 2×:</label>
+    <input id="scope2" type="number" min="0" max="200" value="90">
+  </div>
+  <div class="input-group">
+    <label>Mira 4×:</label>
+    <input id="scope4" type="number" min="0" max="200" value="85">
+  </div>
+  <div class="input-group">
+    <label>Mira AWM:</label>
+    <input id="awm" type="number" min="0" max="200" value="50">
+  </div>
+  <div class="input-group">
+    <label>Olhadinha:</label>
+    <input id="peek" type="number" min="0" max="200" value="100">
+  </div>
+  <button onclick="generar()">Generar Sensibilidad</button>
+  <pre id="output">Aquí aparecerá tu configuración...</pre>
+
+  <script>
+    function generar(){
+      const config = {
+        "Geral": document.getElementById("general").value,
+        "Ponto Vermelho": document.getElementById("reddot").value,
+        "Mira 2x": document.getElementById("scope2").value,
+        "Mira 4x": document.getElementById("scope4").value,
+        "Mira AWM": document.getElementById("awm").value,
+        "Olhadinha": document.getElementById("peek").value
+      };
+      const texto = Object.entries(config)
+                         .map(([k, v]) => `${k}: ${v}`)
+                         .join("\n");
+      const output = document.getElementById("output");
+      output.textContent = texto;
+      navigator.clipboard.writeText(texto);
+      output.textContent += "\n\n¡Copiado al portapapeles!";
+    }
+  </script>
+</body>
+</html>
