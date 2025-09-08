@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de Sensibilidad Real - Free Fire</title>
+  <style>
+    body {
+      background: #121212;
+      color: #ffffff;
+      font-family: 'Arial', sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      color: #ffa500;
+      text-align: center;
+    }
+    select, button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+    }
+    select {
+      background: #1f1f1f;
+      color: white;
+      border: 1px solid #444;
+    }
+    button {
+      background-color: #ffa500;
+      color: #000;
+      border: none;
+    }
+    pre {
+      background: #1f1f1f;
+      padding: 15px;
+      border-radius: 5px;
+      white-space: pre-line;
+      margin-top: 20px;
+    }
+    .copiado {
+      color: lightgreen;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🎮 Generador de Sensibilidad Funcional</h1>
+
+<label for="marca">Marca del celular:</label>
+<select id="marca">
+  <option value="">-- Selecciona --</option>
+  <option value="samsung">Samsung</option>
+  <option value="xiaomi">Xiaomi</option>
+  <option value="motorola">Motorola</option>
+  <option value="iphone">iPhone</option>
+  <option value="otro">Otro</option>
+</select>
+
+<label for="estilo">Estilo de juego:</label>
+<select id="estilo">
+  <option value="">-- Selecciona --</option>
+  <option value="agresivo">Agresivo (rush, mp40, smg)</option>
+  <option value="equilibrado">Equilibrado</option>
+  <option value="preciso">Preciso (larga distancia)</option>
+</select>
+
+<label for="pantalla">Pantalla/DPI:</label>
+<select id="pantalla">
+  <option value="">-- Selecciona --</option>
+  <option value="normal">Normal (60Hz, DPI < 500)</option>
+  <option value="alta">Alta (90Hz+, DPI 500+)</option>
+</select>
+
+<button onclick="generarSensi()">Generar Sensibilidad</button>
+<pre id="output">Aquí aparecerá tu sensibilidad recomendada...</pre>
+<span class="copiado" id="mensaje"></span>
+
+<script>
+  function generarSensi() {
+    const marca = document.getElementById("marca").value;
+    const estilo = document.getElementById("estilo").value;
+    const pantalla = document.getElementById("pantalla").value;
+    const out = document.getElementById("output");
+    const msg = document.getElementById("mensaje");
+
+    if (!marca || !estilo || !pantalla) {
+      out.textContent = "⚠️ Por favor selecciona todas las opciones.";
+      return;
+    }
+
+    // Base sensible por tipo de jugador
+    let base = {
+      general: 90,
+      redDot: 90,
+      mira2x: 85,
+      mira4x: 80,
+      awm: 50,
+      libre: 90
+    };
+
+    // Ajuste según estilo de juego
+    if (estilo === "agresivo") {
+      base.general += 5;
+      base.redDot += 10;
+      base.libre += 5;
+    } else if (estilo === "preciso") {
+      base.mira2x -= 5;
+      base.mira4x -= 5;
+      base.awm += 5;
+    }
+
+    // Ajuste por DPI/pantalla
+    if (pantalla === "alta") {
+      base.general += 5;
+      base.redDot += 5;
+      base.mira2x += 5;
+      base.mira4x += 5;
+    }
+
+    // Ajuste por marca
+    if (marca === "xiaomi") {
+      base.general += 5;
+      base.redDot += 5;
+    } else if (marca === "iphone") {
+      base.general = 100;
+      base.redDot = 100;
+      base.mira2x = 95;
+      base.mira4x = 90;
+      base.awm = 60;
+    } else if (marca === "motorola") {
+      base.general -= 5;
+    }
+
+    const resultado = `
+📱 Marca: ${marca.charAt(0).toUpperCase() + marca.slice(1)}
+🎮 Estilo: ${estilo}
+📲 Pantalla: ${pantalla}
+
+🎯 Sensibilidad recomendada:
+• General: ${base.general}
+• Punto Rojo: ${base.redDot}
+• Mira 2x: ${base.mira2x}
+• Mira 4x: ${base.mira4x}
+• Mira AWM: ${base.awm}
+• Mira libre: ${base.libre}
+`;
+
+    out.textContent = resultado;
+    navigator.clipboard.writeText(resultado);
+    msg.textContent = "✅ Sensibilidad copiada al portapapeles.";
+    setTimeout(() => { msg.textContent = ""; }, 3000);
+  }
+</script>
+
+</body>
+</html>
